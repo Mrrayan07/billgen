@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bill Generator - Margroms</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 100%; margin: auto; padding: 20px; border: 2px solid #008000; border-radius: 12px; background-color: #ffffff; box-sizing: border-box; }
+        h1 { text-align: center; color: #ff8c00; }
+        .section { margin-bottom: 20px; padding: 10px; border: 1px solid #ff8c00; border-radius: 8px; background-color: #f0fff0; transition: transform 0.2s; }
+        .section:hover { transform: scale(1.02); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .section-title { font-weight: bold; color: #008000; margin-bottom: 10px; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .header img { max-width: 80px; }
+        .business-info { text-align: right; }
+        .qr-code { display: block; margin: 10px auto; max-width: 150px; }
+        .thank-you { text-align: center; font-weight: bold; color: #008000; margin-top: 20px; }
+        button { display: block; width: 100%; padding: 10px; background-color: #ff8c00; color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #008000; }
+        .customer-info, .item-entry { display: flex; flex-wrap: wrap; gap: 10px; }
+        .customer-info input, textarea, .section input { flex: 1; padding: 8px; border: 1px solid #008000; border-radius: 4px; transition: border-color 0.3s; }
+        .customer-info input:focus, textarea:focus, .section input:focus { border-color: #ff8c00; outline: none; }
+        .delete-btn { background-color: #ff0000; color: #fff; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; transition: background-color 0.3s; }
+        .delete-btn:hover { background-color: #cc0000; }
+        .total { text-align: right; margin-top: 10px; }
+        #total { width: 50%; padding: 10px; font-size: 18px; text-align: right; border: none; background-color: transparent; }
+    </style>
+</head>
+<body>
+    <h1>Margroms - Bill Generator</h1>
+
+    <div class="header">
+        <img src="logo.png" alt="Margroms Logo">
+        <div class="business-info">
+            <p><b>Margroms</b></p>
+            <p>Phone: 9663377473</p>
+            <p>Email: margrosmarketing@gmail.com</p>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-title">Customer Information</div>
+        <div class="customer-info">
+            <input type="text" placeholder="Customer Name" required>
+            <input type="text" placeholder="Customer Contact Number" required>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-title">Item Details</div>
+        <div id="items-list">
+            <div class="item-entry">
+                <input type="text" placeholder="Item Name" required>
+                <input type="number" placeholder="Price" class="item-price" required oninput="calculateTotal()">
+                <button class="delete-btn" onclick="deleteItem(this)">Delete</button>
+            </div>
+        </div>
+        <button type="button" onclick="addItem()">Add Item</button>
+        <div class="total">
+            <input type="text" id="total" placeholder="Final Total" readonly>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-title">Bill Details / Payment Information</div>
+        <p><b>UPI Number:</b> 7483988687</p>
+        <p><b>UPI ID:</b> mrrayan0407-3@okaxis</p>
+        <img src="qr.jpeg" alt="UPI QR Code" class="qr-code">
+    </div>
+
+    <div class="thank-you">Thank you for choosing Margroms! 😊</div>
+
+    <button onclick="downloadPDF()">Download Bill as PDF</button>
+
+    <script>
+        function addItem() {
+            const itemList = document.getElementById('items-list');
+            const newItem = document.createElement('div');
+            newItem.className = 'item-entry';
+            newItem.innerHTML = `
+                <input type="text" placeholder="Item Name" required>
+                <input type="number" placeholder="Price" class="item-price" required oninput="calculateTotal()">
+                <button class="delete-btn" onclick="deleteItem(this)">Delete</button>
+            `;
+            itemList.appendChild(newItem);
+        }
+
+        function deleteItem(button) {
+            const itemEntry = button.parentElement;
+            itemEntry.remove();
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const prices = document.querySelectorAll('.item-price');
+            let total = 0;
+            prices.forEach(price => {
+                total += parseFloat(price.value) || 0;
+            });
+            document.getElementById('total').value = total.toFixed(2);
+        }
+
+        function downloadPDF() {
+            alert('Your bill is being generated!');
+            window.print();
+        }
+    </script>
+</body>
+</html>
